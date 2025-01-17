@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -20,19 +19,14 @@ type service struct {
 	db *mongo.Client
 }
 
-var (
-	host = os.Getenv("BLUEPRINT_DB_HOST")
-	port = os.Getenv("BLUEPRINT_DB_PORT")
-	//database = os.Getenv("BLUEPRINT_DB_DATABASE")
-)
-
 func New() Service {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s", host, port)))
+	uri := os.Getenv("BLUEPRINT_DB_URI")
 
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
 	if err != nil {
 		log.Fatal(err)
-
 	}
+
 	return &service{
 		db: client,
 	}

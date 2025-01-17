@@ -24,10 +24,7 @@ func mustStartMongoContainer() (func(context.Context) error, error) {
 		return dbContainer.Terminate, err
 	}
 
-	host = dbHost
-	port = dbPort.Port()
-
-	return dbContainer.Terminate, err
+	return dbContainer.Terminate, nil
 }
 
 func TestMain(m *testing.M) {
