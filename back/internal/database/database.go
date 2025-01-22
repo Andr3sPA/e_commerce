@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -59,12 +60,14 @@ func (s *service) CountDocuments(filter bson.D) (int64, error) {
 }
 
 type Clothing struct {
-    Name        string  `bson:"name,omitempty"`         
-    Size        string  `bson:"size,omitempty"`         
-    Color       string  `bson:"color,omitempty"`        
-    Price       float64 `bson:"price,omitempty"`     
-    Material    string  `bson:"material,omitempty"`     
-    Description string  `bson:"description,omitempty"`  
+    Name        string    `bson:"name,omitempty"`
+    Reference   string    `bson:"reference,omitempty"`
+    Size        string    `bson:"size,omitempty"`
+    Color       string    `bson:"color,omitempty"`
+    Price       float64   `bson:"price,omitempty"`
+    Material    string    `bson:"material,omitempty"`
+    Description string    `bson:"description,omitempty"`
+    Images      []string  `bson:"images,omitempty"` 
 }
 
 
@@ -73,6 +76,9 @@ func (s *service) InsertClothes(clothes []Clothing) ([]interface{}, error) {
 
 	var docs []interface{}
 	for _, item := range clothes {
+		if len(item.Images) == 0 {
+			return nil, fmt.Errorf("each clothing item must have at least one image")
+		}
 		docs = append(docs, item)
 	}
 
@@ -83,3 +89,4 @@ func (s *service) InsertClothes(clothes []Clothing) ([]interface{}, error) {
 
 	return result.InsertedIDs, nil
 }
+
