@@ -1,0 +1,61 @@
+<mat-card class="filters">
+  <h2>Filters</h2>
+  <div>
+    <span>Price rage:</span>
+    <span>{{filters.price[0]}} - {{filters.price[1]}}</span>
+    <mat-slider min="0" max="1000">
+      <input value={{filters.price[0]}} matSliderStartThumb (valueChange)="modifyPriceRange('min', $event)">
+      <input value={{filters.price[1]}} matSliderEndThumb (valueChange)="modifyPriceRange('max', $event)">
+    </mat-slider>
+  </div>
+  <div>
+    <span>Sizes:</span>
+    @for (s of filters.sizes; track $index){
+    <mat-checkbox [checked]="s[1]" (change)="toggleSizeFilter($index)">{{s[0]}}</mat-checkbox>
+    }
+  </div>
+  <mat-card-actions>
+    <button mat-flat-button color="primary" (click)="applyFilters()">
+      <mat-icon aria-hidden="false" aria-label="Apply filters" fontIcon="filter_alt" />
+      Apply
+    </button>
+  </mat-card-actions>
+</mat-card>
+<mat-divider vertical="true"></mat-divider>
+
+@let sortingDirs = ["none", "asc", "desc"];
+@let sortingDirsIcons = ["horizontal_rule", "arrow_upwards_alt", "arrow_downwards_alt"];
+
+<div class="main-content">
+  <mat-card class="actions">
+    <button mat-icon-button [matMenuTriggerFor]="priceSort">
+      <mat-icon fontIcon="attach_money" />
+    </button>
+    <mat-menu #priceSort="matMenu">
+      @for (sdir of sortingDirs; track $index){
+      <button mat-menu-item class="sort-order-item" (click)="changeSorting('price', sdir)">
+        <mat-icon fontIcon={{sortingDirsIcons[$index]}} />
+        {{sdir | titlecase}}
+      </button>
+      }
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="nameSort">
+      <mat-icon fontIcon="sort_by_alpha" />
+    </button>
+    <mat-menu #nameSort="matMenu">
+      @for (sdir of sortingDirs; track $index){
+      <button mat-menu-item class="sort-order-item" (click)="changeSorting('name', sdir)">
+        <mat-icon fontIcon={{sortingDirsIcons[$index]}} />
+        {{sdir | titlecase}}
+      </button>
+      }
+    </mat-menu>
+  </mat-card>
+  <mat-grid-list [cols]="cols" rowHeight={{rowHeight}} gutterSize="1rem" [@gridChange] class="products-grid">
+    @for (p of filteredProducts; track p.name) {
+    <mat-grid-tile>
+      <app-product [info]=p></app-product>
+    </mat-grid-tile>
+    }
+  </mat-grid-list>
+</div>
