@@ -12,24 +12,25 @@ import { ProductComponent } from "../product/product.component";
 import { Product, Size, products, sizesOrdered } from './examples';
 import { MatMenuModule } from '@angular/material/menu';
 import { TitleCasePipe } from '@angular/common';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 @Component({
-    selector: 'app-browse',
-    imports: [MatListModule, MatGridListModule, ProductComponent, MatSliderModule, MatCheckboxModule,
-        MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, TitleCasePipe],
-    templateUrl: './browse.component.html',
-    styleUrl: './browse.component.css',
-    animations: [
-        trigger('gridChange', [
-            transition(':enter', [
-                style({ opacity: 0, transform: 'scale(0.9)' }),
-                animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
-            ]),
-            transition(':leave', [
-                animate('200ms ease-in', style({ opacity: 0, transform: 'scale(0.9)' })),
-            ]),
-        ]),
-    ]
+  selector: 'app-browse',
+  imports: [MatListModule, MatGridListModule, ProductComponent, MatSliderModule, MatCheckboxModule,
+    MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, TitleCasePipe, InfiniteScrollDirective],
+  templateUrl: './browse.component.html',
+  styleUrl: './browse.component.css',
+  animations: [
+    trigger('gridChange', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.9)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'scale(0.9)' })),
+      ]),
+    ]),
+  ]
 })
 export class BrowseComponent implements OnInit {
   products = products;
@@ -43,10 +44,8 @@ export class BrowseComponent implements OnInit {
       price: [0, 500],
       sizes: sizesOrdered.map(s => ([s, true]))
     }
-  sorting = {
-    price: "none",
-    name: "none"
-  }
+  filtersApplied = true
+  lastSorting: { by: "price" | "name", dir: string } = { by: "price", dir: "none" }
 
   constructor(private bpObs: BreakpointObserver) {
     this.bpObs.observe([
@@ -72,24 +71,36 @@ export class BrowseComponent implements OnInit {
     this.applyFilters()
   }
 
-  modifyPriceRange(which: "min" | "max", val: number) {
+  onScroll() {
+    // TODO: get more products from back
+  }
+
+  changePriceRange(which: "min" | "max", val: number) {
     this.filters.price[which === "min" ? 0 : 1] = val
+    this.filtersApplied = false
   }
 
   toggleSizeFilter(idx: number) {
     this.filters.sizes[idx][1] = !this.filters.sizes[idx][1]
+    this.filtersApplied = false
   }
 
-  changeSorting(by: "name" | "price", dir: string) {
-    this.sorting[by] = dir
-  }
+  sortProducts(by: "name" | "price", dir: string) {
+    this.filteredProducts.sort((a, b) => {
+      let comp = 0
+      if (by === "name") {
+        comp = b.name.localeCompare(a.name)
+      } else if (by == "price") {
+        comp = b.price - a.price
+      }
 
-  sortProducts() {
-    if (this.sorting.price === "none" && this.sorting.name === "none") {
-      return
-    }
+      if (dir == "asc") {
+        comp = -comp
+      }
 
-    // TODO: define sort priority or smth
+      return comp
+    })
+    this.lastSorting = { by, dir }
   }
 
   applyFilters() {
@@ -98,5 +109,7 @@ export class BrowseComponent implements OnInit {
       const sizeFilter = this.filters.sizes[sizesOrdered.indexOf(p.size)][1]
       return priceFilter && sizeFilter
     })
+    this.filtersApplied = true
+    this.sortProducts(this.lastSorting.by, this.lastSorting.dir)
   }
 }
