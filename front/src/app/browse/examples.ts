@@ -12,6 +12,19 @@ export interface Product {
   inStock: number,
 }
 
+export function emptyProduct() {
+  return {
+    imgUrl: null,
+    name: "",
+    description: "",
+    category: "",
+    materials: "",
+    price: 0,
+    size: undefined,
+    inStock: 0,
+  }
+}
+
 export const products: Product[] = [
   {
     imgUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",

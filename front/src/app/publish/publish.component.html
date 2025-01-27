@@ -1,0 +1,47 @@
+<div>
+  <form [formGroup]="productForm" (submit)="onSubmit()">
+
+    <input #imgFile hidden id="img" type="file" accept="image/*" (change)="onImgChange($event)" />
+    <div class="product-img" [class.not-uploaded]="productForm.value['imgUrl'] === null">
+      @if (productForm.value['imgUrl'] !== null){
+      <img [src]="productForm.value['imgUrl']" [matTooltip]="imgFile.files ? imgFile.files[0].name : ''"
+        matTooltipShowDelay=500 />
+      }
+      <button mat-raised-button color="accent" type="button" (click)="imgFile.click()">
+        <mat-icon fontIcon="upload" />
+        Upload image
+      </button>
+    </div>
+
+    <div class="fields">
+
+      @for (field of fieldTypes | keyvalue; track field.key){
+      <mat-form-field>
+        <mat-label>{{ field.key | camelToDisplay}}</mat-label>
+
+        @if (field.key === "price"){
+        <span matTextPrefix>$</span>
+        }
+
+        @if (field.value === "number"){
+        <input matInput type="number" [id]="field.key" required [formControlName]="field.key" />
+        } @else if (field.value === "textarea"){
+        <textarea matInput [id]="field.key" required [formControlName]="field.key"></textarea>
+        } @else {
+        <input matInput type="email" [id]="field.key" required [formControlName]="field.key" />
+        }
+
+        @if (productForm.hasError('min', field.key)){
+        <mat-error>
+          Type a value greater than 0
+        </mat-error>
+        }
+      </mat-form-field>
+      }
+
+      <button mat-flat-button color="primary" type="submit">
+        Ok
+      </button>
+    </div>
+  </form>
+</div>
