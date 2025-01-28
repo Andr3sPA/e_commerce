@@ -1,11 +1,12 @@
 <div>
   <form [formGroup]="productForm" (submit)="onSubmit()">
+    <legend class="title">Add the requested info to publish your product</legend>
+    <mat-divider class="title"></mat-divider>
 
     <input #imgFile hidden id="img" type="file" accept="image/*" (change)="onImgChange($event)" />
     <div class="product-img" [class.not-uploaded]="productForm.value['imgUrl'] === null">
-      @if (productForm.value['imgUrl'] !== null){
-      <img [src]="productForm.value['imgUrl']" [matTooltip]="imgFile.files ? imgFile.files[0].name : ''"
-        matTooltipShowDelay=500 />
+      @if (imgUrl){
+      <img [src]="imgUrl" [matTooltip]="imgFile.files ? imgFile.files[0].name : ''" matTooltipShowDelay=500 />
       }
       <button mat-raised-button color="accent" type="button" (click)="imgFile.click()">
         <mat-icon fontIcon="upload" />
@@ -39,9 +40,12 @@
       </mat-form-field>
       }
 
-      <button mat-flat-button color="primary" type="submit">
-        Ok
-      </button>
+      <div [class.invalid-evade]="productForm.status === 'INVALID'" class="submit-btn-cont"
+        [style.--offset]="submitBtnOffset" (mouseenter)="onSubmitBtnHover()">
+        <button mat-flat-button [disabled]="productForm.status !== 'VALID'" color="primary" type="submit">
+          Ok
+        </button>
+      </div>
     </div>
   </form>
 </div>

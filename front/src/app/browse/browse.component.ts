@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
 import { ProductComponent } from "../product/product.component";
-import { Product, Size, products, sizesOrdered } from './examples';
+import { Product, Size, sizesOrdered } from './examples';
 import { MatMenuModule } from '@angular/material/menu';
 import { TitleCasePipe } from '@angular/common';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
@@ -33,7 +33,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
   ]
 })
 export class BrowseComponent implements OnInit {
-  products = products;
+  products: Product[] = [];
   filteredProducts: Product[] = [];
   cols = 5;
   rowHeight = "10rem"
@@ -104,9 +104,9 @@ export class BrowseComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredProducts = products.filter(p => {
+    this.filteredProducts = this.products.filter(p => {
       const priceFilter = p.price >= this.filters.price[0] && p.price <= this.filters.price[1]
-      const sizeFilter = this.filters.sizes[sizesOrdered.indexOf(p.size)][1]
+      const sizeFilter = this.filters.sizes[sizesOrdered.indexOf(p.size as Size)][1]
       return priceFilter && sizeFilter
     })
     this.filtersApplied = true

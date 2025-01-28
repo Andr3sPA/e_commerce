@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { emptyProduct, Product } from '../browse/examples';
@@ -9,6 +9,7 @@ import { CamelToDisplayPipe } from '../camel-to-display.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-publish',
@@ -18,17 +19,19 @@ import { MatDividerModule } from '@angular/material/divider';
   styleUrl: './publish.component.css'
 })
 export class PublishComponent implements OnInit {
+  httpClient = inject(HttpClient)
   formBuilder = inject(FormBuilder)
   productForm!: FormGroup
-  fieldTypes = {
+  fieldTypes: { [key in keyof Product]?: string } = {
     name: "text",
     description: "textarea",
-    category: "text",
-    materials: "text",
+    reference: "text",
+    color: "text",
+    material: "text",
     price: "number",
     size: "text",
-    inStock: "number",
   }
+  imgUrl?: string;
 
   ngOnInit() {
     const p = emptyProduct()
@@ -53,26 +56,20 @@ export class PublishComponent implements OnInit {
           validators
         })
       )
-      if (k === "imgUrl") {
-        this.productForm.addControl("imgFile",
-          this.formBuilder.control(null)
-        )
-      } else {
-        this.fieldTypes[k as keyof typeof this.fieldTypes] = controlType
-      }
+
     })
   }
 
   onImgChange(e: Event) {
     if ("files" in e.target!) {
       const img = (e.target.files as FileList)[0]
+      this.productForm.patchValue({
+        image: img
+      })
       const reader = new FileReader()
-      reader.readAsDataURL((e.target.files as FileList)[0])
+      reader.readAsDataURL(img)
       reader.onload = () => {
-        this.productForm.patchValue({
-          imgFile: img,
-          imgUrl: reader.result
-        })
+        this.imgUrl = reader.result as string
       }
     } else {
       console.error("file upload failed")
@@ -80,7 +77,27 @@ export class PublishComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: validate img an the rest
-    console.log(this.productForm.value)
+    if (this.productForm.status !== "VALID") {
+      return
+    }
+    const formData = new FormData()
+    Object.entries(this.productForm.value).forEach(([k, v]: any) => {
+      formData.append(k, v)
+    })
+
+    console.log("sending... ", this.productForm.value)
+    this.httpClient.post("http://localhost:8080/clothes", formData).subscribe(res => {
+      console.log("got res: ", res)
+    })
+  }
+
+  submitBtnOffset = "0%"
+  onSubmitBtnHover() {
+    let newOffset = 50 + Math.random() * 200
+    if (this.submitBtnOffset[0] !== "-") {
+      newOffset = -newOffset
+    }
+    this.submitBtnOffset = Math.floor(newOffset) + "%"
+    console.log(this.submitBtnOffset)
   }
 }
