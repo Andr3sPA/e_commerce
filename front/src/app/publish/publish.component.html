@@ -4,7 +4,7 @@
     <mat-divider class="title"></mat-divider>
 
     <input #imgFile hidden id="img" type="file" accept="image/*" (change)="onImgChange($event)" />
-    <div class="product-img" [class.not-uploaded]="productForm.value['imgUrl'] === null">
+    <div class="product-img" [class.not-uploaded]="productForm.value['image'] === null">
       @if (imgUrl){
       <img [src]="imgUrl" [matTooltip]="imgFile.files ? imgFile.files[0].name : ''" matTooltipShowDelay=500 />
       }

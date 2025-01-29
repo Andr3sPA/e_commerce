@@ -16,6 +16,23 @@ form {
   box-shadow: 2px 2px 10px -4px gray;
   border: 1px solid #AAA;
   transition: width .2s ease-out;
+  animation: appear .3s ease-out forwards;
+}
+
+@keyframes appear {
+  from {
+    transform: translate(-5%, -5%);
+    opacity: 0;
+    scale: .9;
+  }
+
+  to {
+    transform: translate(0);
+    opacity: 1;
+    scale: 1;
+    animation: border-increase .3s linear infinite;
+  }
+
 }
 
 .title {
@@ -74,8 +91,8 @@ input#price {
   object-fit: contain;
   border-radius: 4px;
   width: 400px;
+  max-width: 100%;
   box-shadow: 1px 1px 8px -4px gray;
-  transition: width .3s linear;
 }
 
 .product-img.not-uploaded {

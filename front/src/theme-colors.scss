@@ -1,0 +1,41 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$light-primary: mat.define-palette(mat.$teal-palette);
+$light-accent: mat.define-palette(mat.$blue-gray-palette );
+$light-warn: mat.define-palette(mat.$red-palette );
+$light-tertiary: mat.define-palette(mat.$green-palette );
+
+@mixin generateColors($prefix, $palette) {
+  $colors-map: (
+  );
+
+@each $key, $value in $palette {
+  @if $key !=contrast {
+    .app-#{$prefix}-#{$key} {
+      color: map.get($palette, $key);
+    }
+
+    $map: (
+    );
+  $map: map.merge($map, ($key: $value));
+  $colors-map: map.merge($colors-map, $map);
+}
+}
+
+:root {
+  @each $key, $value in $colors-map {
+    --app-#{$prefix}-#{$key}: #{$value};
+  }
+}
+}
+
+@mixin generate-material-classes {
+  @include generateColors(primary, $light-primary);
+  @include generateColors(accent, $light-accent);
+  @include generateColors(warn, $light-warn);
+  @include generateColors(tertiary, $light-tertiary);
+}
+
+// Apply the theme to the global document
+@include generate-material-classes();

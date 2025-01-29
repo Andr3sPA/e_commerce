@@ -1,56 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
-@use 'sass:map';
 @use '@angular/material' as mat;
+@use 'theme-colors.scss' as theme;
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sixtyfour+Convergence&display=swap');
 
-$my-primary: mat.define-palette(mat.$teal-palette);
-$my-accent: mat.define-palette(mat.$blue-gray-palette );
-$my-warn: mat.define-palette(mat.$red-palette );
-$my-tertiary: mat.define-palette(mat.$green-palette );
-
-$my-theme: mat.define-light-theme((color: (primary: $my-primary,
-        accent: $my-accent,
-        warn: $my-warn,
-        tertiary: $my-tertiary,
+$light-theme: mat.define-light-theme((color: (primary: theme.$light-primary,
+        accent: theme.$light-accent,
+        warn: theme.$light-warn,
+        tertiary: theme.$light-tertiary,
       ),
       typography: mat.define-typography-config(Josefin Sans),
     ));
 
-@mixin generateColors($prefix, $palette) {
-  $colors-map: (
-  );
-
-@each $key, $value in $palette {
-  @if $key !=contrast {
-    .app-#{$prefix}-#{$key} {
-      color: map.get($palette, $key);
-    }
-
-    $map: (
-    );
-  $map: map.merge($map, ($key: $value));
-  $colors-map: map.merge($colors-map, $map);
-}
-}
-
-:root {
-  @each $key, $value in $colors-map {
-    --app-#{$prefix}-#{$key}: #{$value};
-  }
-}
-}
-
-@mixin generate-material-classes {
-  @include generateColors(primary, $my-primary);
-  @include generateColors(accent, $my-accent);
-  @include generateColors(warn, $my-warn);
-  @include generateColors(tertiary, $my-tertiary);
-}
-
-// Apply the theme to the global document
-@include generate-material-classes();
-@include mat.all-component-themes($my-theme);
+@include mat.all-component-themes($light-theme);
 
 html,
 body {
