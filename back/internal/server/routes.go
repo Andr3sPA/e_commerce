@@ -1,6 +1,7 @@
 package server
 
 import (
+	"back/internal/handlers"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -21,7 +22,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.GET("/clothes", s.clothesHandler)
 	r.POST("/clothes", s.insertClothing)
 	r.GET("/health", s.healthHandler)
-
+	r.POST("/register", handlers.RegisterHandler(s.db))
+	r.POST("/login", handlers.LoginHandler(s.db))
 	return r
 }
 
