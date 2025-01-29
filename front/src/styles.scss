@@ -1,27 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'sass:map';
 @use '@angular/material' as mat;
-@use 'theme-colors.scss' as theme;
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@use '_theme-colors.scss' as theme;
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Sixtyfour+Convergence&display=swap');
 
-$light-theme: mat.define-light-theme((color: (primary: theme.$light-primary,
-        accent: theme.$light-accent,
-        warn: theme.$light-warn,
-        tertiary: theme.$light-tertiary,
-      ),
-      typography: mat.define-typography-config(Josefin Sans),
-    ));
+html {
+  color-scheme: light;
+  @include mat.theme((color: (
+        /**/
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette ),
+      typography: Josefin Sans,
+      density: 0));
+}
 
-@include mat.all-component-themes($light-theme);
 
 html,
 body {
   height: fit-content;
   min-height: 100vh;
-  background-color: rgba($color: #000000, $alpha: .02);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
 }
 
 body {
   margin: 0;
   font-family: Josefin Sans, Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+button {
+  transition: .1s ease-out;
+}
+
+.secondary {
+  $secondary: map.get(theme.$primary-palette, secondary);
+  @include mat.button-overrides ((
+      /**/
+      filled-container-color: map.get($secondary, 90),
+      filled-label-text-color: map.get($secondary, 30),
+    ));
+  @include mat.icon-overrides((
+      /**/
+      color: map.get($secondary, 40)));
+}
+
+
+.error {
+  $error: map.get(theme.$primary-palette, error);
+  @include mat.button-overrides ((
+      /**/
+      filled-container-color: map.get($error, 90),
+      filled-label-text-color: map.get($error, 30),
+    ));
+  @include mat.icon-overrides((
+      /**/
+      color: map.get($error, 40)));
 }

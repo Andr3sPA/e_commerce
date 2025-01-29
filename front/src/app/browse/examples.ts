@@ -28,17 +28,19 @@ export function emptyProduct() {
   return emptyP
 }
 
-// export const products: Product[] = [
-//   {
-//     imgUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
-//     name: "Classic Denim Jacket",
-//     description: "A timeless denim jacket for casual outings.",
-//     category: "Jackets",
-//     materials: "100% Cotton",
-//     price: 59.99,
-//     size: "L",
-//     inStock: 60,
-//   },
+export const products: Product[] = [
+  {
+    image: null,
+    imgUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
+    name: "Classic Denim Jacket",
+    description: "A timeless denim jacket for casual outings.",
+    material: "100% Cotton",
+    price: 59.99,
+    size: "L",
+    reference: "",
+    color: ""
+  },
+]
 //   {
 //     imgUrl: "https://m.media-amazon.com/images/I/61dExu1GuhL._AC_UY1000_.jpg",
 //     name: "Cotton T-Shirt",

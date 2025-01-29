@@ -1,29 +1,21 @@
 nav {
-  background-color: var(--app-primary-default);
+  background-color: var(--mat-sys-primary);
   box-sizing: border-box;
   display: flex;
   margin-bottom: 2rem;
-  padding: 0rem 1rem;
+  padding: .1rem 1rem;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  box-shadow: 0px 2px 8px grey;
+  box-shadow: var(--mat-sys-level3);
 }
 
 nav * {
-  color: var(--app-primary-default-contrast);
+  color: var(--mat-sys-on-primary);
 }
 
 .nav-btn {
   padding: 1.5rem 1rem;
-  background: linear-gradient(transparent 50%, var(--app-primary-darker) 100%);
-  background-size: 100% 200%;
-  background-position-y: top;
-  transition: background-position .2s ease-out;
-}
-
-.nav-btn:hover {
-  background-position-y: bottom;
-  /* background: radial-gradient(circle at bottom, var(--app-primary-darker) 5%, transparent 40%); */
+  border-radius: 0px;
 }

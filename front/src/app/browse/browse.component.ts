@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
 import { ProductComponent } from "../product/product.component";
-import { Product, Size, sizesOrdered } from './examples';
+import { Product, products, Size, sizesOrdered } from './examples';
 import { MatMenuModule } from '@angular/material/menu';
 import { TitleCasePipe } from '@angular/common';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
@@ -33,7 +33,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
   ]
 })
 export class BrowseComponent implements OnInit {
-  products: Product[] = [];
+  products: Product[] = products;
   filteredProducts: Product[] = [];
   cols = 5;
   rowHeight = "10rem"

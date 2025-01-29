@@ -1,6 +1,7 @@
 div {
   margin: auto;
-  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+
   width: fit-content;
 }
 
@@ -38,10 +39,8 @@ form {
 .title {
   grid-column: 1 / -1;
   justify-self: center;
-  padding: 0rem 1rem;
-  color: var(--app-primary-800);
-  font-size: 1.2rem;
-  font-weight: 500;
+  padding: .5rem 2rem;
+  font: var(--mat-sys-headline-small);
   width: fit-content;
   min-width: 16rem;
 }
@@ -96,7 +95,7 @@ input#price {
 }
 
 .product-img.not-uploaded {
-  background: radial-gradient(circle at center, color-mix(in srgb, var(--app-primary-default) 20%, transparent), transparent 10%);
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--mat-sys-primary) 20%, transparent), transparent 10%);
   background-size: 100% 100%;
   background-position: center;
   transition: background-size .2s ease-in-out;

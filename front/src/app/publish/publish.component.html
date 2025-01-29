@@ -41,7 +41,7 @@
       }
 
       <div [class.invalid-evade]="productForm.status === 'INVALID'" class="submit-btn-cont"
-        [style.--offset]="submitBtnOffset" (mouseenter)="onSubmitBtnHover()">
+        [style.--offset]="submitBtnOffset" (mouseover)="onSubmitBtnHover()">
         <button mat-flat-button [disabled]="productForm.status !== 'VALID'" color="primary" type="submit">
           Ok
         </button>

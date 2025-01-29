@@ -15,15 +15,12 @@
     }
   </div>
   <mat-card-actions>
-    <button mat-flat-button color="primary" (click)="applyFilters()">
+    <button [disabled]="filtersApplied" mat-flat-button (click)="applyFilters()">
       <mat-icon aria-hidden="false" aria-label="Apply filters" fontIcon="filter_alt" />
       Apply
     </button>
-    @if (!filtersApplied){
-    <mat-icon fontIcon="priority_high" color="warn" />
-    } @else {
+    <mat-icon fontIcon="priority_high" class="error" [class.hide-left]="filtersApplied" />
     <mat-icon />
-    }
   </mat-card-actions>
 </mat-card>
 <mat-divider vertical="true"></mat-divider>
