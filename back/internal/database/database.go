@@ -8,13 +8,14 @@ import (
     "mime/multipart"
     "os"
     "time"
-
     _ "github.com/joho/godotenv/autoload"
     "go.mongodb.org/mongo-driver/bson"
     "go.mongodb.org/mongo-driver/bson/primitive"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/gridfs"
     "go.mongodb.org/mongo-driver/mongo/options"
+    "github.com/cloudinary/cloudinary-go/v2"
+
 )
 
 type Service interface {
@@ -22,7 +23,10 @@ type Service interface {
     CountDocuments(filter bson.D) (int64, error)
     InsertClothing(clothing Clothing) (interface{}, error)
     UploadImage(file multipart.File, fileHeader *multipart.FileHeader) (string, error)
-}
+    Credentials() (*cloudinary.Cloudinary, context.Context, error)
+    GetDocuments(filter bson.D) ([]Clothing, error)
+    }
+
 
 type service struct {
     db *mongo.Client
@@ -63,6 +67,19 @@ func (s *service) CountDocuments(filter bson.D) (int64, error) {
     }
     return count, nil
 }
+func (s *service) GetDocuments(filter bson.D) ([]Clothing, error) {
+    coll := s.db.Database("e_commerce").Collection("clothes")
+    cursor, err := coll.Find(context.TODO(), filter)
+    if err != nil {
+        return []Clothing{}, err
+    }
+    // Unpacks the cursor into a slice
+	var results []Clothing
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		panic(err)
+	}
+    return results, nil
+}
 
 type Clothing struct {
     Name        string   `bson:"name,omitempty"`
@@ -73,6 +90,27 @@ type Clothing struct {
     Material    string   `bson:"material,omitempty"`
     Description string   `bson:"description,omitempty"`
     Images      []string `bson:"images,omitempty"`
+}
+func (s *service) Credentials() (*cloudinary.Cloudinary, context.Context, error) {
+    // Obtén la URL de Cloudinary desde las variables de entorno
+    cloudinaryURL := os.Getenv("CLOUDINARY_URL")
+    if cloudinaryURL == "" {
+        return nil, nil, fmt.Errorf("CLOUDINARY_URL no está configurada")
+    }
+
+    // Crea una nueva instancia de Cloudinary
+    cld, err := cloudinary.NewFromURL(cloudinaryURL)
+    if err != nil {
+        return nil, nil, fmt.Errorf("error al crear instancia de Cloudinary: %w", err)
+    }
+
+    // Configura la URL para que sea segura (https)
+    cld.Config.URL.Secure = true
+
+    // Crea un contexto
+    ctx := context.Background()
+
+    return cld, ctx, nil
 }
 
 func (s *service) InsertClothing(clothing Clothing) (interface{}, error) {

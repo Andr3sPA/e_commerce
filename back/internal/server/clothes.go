@@ -1,26 +1,24 @@
 package server
 
 import (
-    "back/internal/database" // Importa el paquete database
-    "net/http"
-    "strconv"
-
-    "github.com/gin-gonic/gin"
-    "go.mongodb.org/mongo-driver/bson"
+	"back/internal/database" // Importa el paquete database
+	"fmt"
+	"net/http"
+	"strconv"
+	"github.com/cloudinary/cloudinary-go/v2/api"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (s *Server) clothesHandler(c *gin.Context) {
+func (s *Server) getClothes(c *gin.Context){
     filter := bson.D{}
-    count, err := s.db.CountDocuments(filter)
+    clothes, err := s.db.GetDocuments(filter)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
-
-    resp := make(map[string]interface{})
-    resp["message"] = "Hello Clothes"
-    resp["count"] = count
-    c.JSON(http.StatusOK, resp)
+    c.JSON(http.StatusOK, clothes)
 }
 
 func (s *Server) insertClothing(c *gin.Context) {
@@ -43,13 +41,20 @@ func (s *Server) insertClothing(c *gin.Context) {
         return
     }
     defer file.Close()
-
-    imageID, err := s.db.UploadImage(file, files[0])
+    cld, ctx, err := s.db.Credentials()
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
-
+    resp, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{
+        PublicID:       files[0].Filename,
+        UniqueFilename: api.Bool(true),
+        Overwrite:      api.Bool(false),
+    })
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Errorf("error uploading image: %w", err).Error()})
+        return
+    }
     // Create a new Clothing instance and populate it with form data
     var newClothing database.Clothing
     newClothing.Name = form.Value["name"][0]
@@ -65,9 +70,8 @@ func (s *Server) insertClothing(c *gin.Context) {
         return
     }
     newClothing.Price = price
-
     // Add the imageID to the Images field of newClothing
-    newClothing.Images = append(newClothing.Images, imageID)
+    newClothing.Images = append(newClothing.Images, resp.URL)
 
     // Insert clothing into the database
     insertedID, err := s.db.InsertClothing(newClothing)

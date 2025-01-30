@@ -18,7 +18,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	r.GET("/", s.HelloWorldHandler)
-	r.GET("/clothes", s.clothesHandler)
+	r.GET("/clothes", s.getClothes)
 	r.POST("/clothes", s.insertClothing)
 	r.GET("/health", s.healthHandler)
 
