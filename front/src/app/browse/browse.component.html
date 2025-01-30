@@ -1,9 +1,11 @@
 <mat-card class="filters">
   <h2>Filters</h2>
   <div>
-    <span>Price rage:</span>
-    <span>{{filters.price[0]}} - {{filters.price[1]}}</span>
-    <mat-slider min="0" max="1000">
+    <mat-checkbox [checked]="filters.priceEnabled">
+      Price range:
+    </mat-checkbox>
+    <span style="text-align: center;">{{filters.price[0]}} - {{filters.price[1]}}</span>
+    <mat-slider min="0" max="20000">
       <input value={{filters.price[0]}} matSliderStartThumb (valueChange)="changePriceRange('min', $event)">
       <input value={{filters.price[1]}} matSliderEndThumb (valueChange)="changePriceRange('max', $event)">
     </mat-slider>

@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -9,10 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
 import { ProductComponent } from "../product/product.component";
-import { Product, products, Size, sizesOrdered } from './examples';
 import { MatMenuModule } from '@angular/material/menu';
 import { TitleCasePipe } from '@angular/common';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { HttpClient } from '@angular/common/http';
+import { Product, Size, sizesOrdered } from '../../models/product';
+import { mapKeys } from '../../utils/product';
 
 @Component({
   selector: 'app-browse',
@@ -32,18 +34,18 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
     ]),
   ]
 })
+
 export class BrowseComponent implements OnInit {
-  products: Product[] = products;
+  httpClient = inject(HttpClient)
+  products: Product[] = [];
   filteredProducts: Product[] = [];
   cols = 5;
   rowHeight = "10rem"
-  filters: {
-    price: [number, number],
-    sizes: [Size, boolean][]
-  } = {
-      price: [0, 500],
-      sizes: sizesOrdered.map(s => ([s, true]))
-    }
+  filters = {
+    priceEnabled: false,
+    price: [1000, 8000],
+    sizes: sizesOrdered.map(s => ([s, true]))
+  }
   filtersApplied = true
   lastSorting: { by: "price" | "name", dir: string } = { by: "price", dir: "none" }
 
@@ -67,6 +69,11 @@ export class BrowseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.httpClient.get("http://localhost:8080/clothes").subscribe(res => {
+      this.products = (res as any[]).map((p) => mapKeys(p))
+    })
+
     // apply current filters
     this.applyFilters()
   }
@@ -105,7 +112,7 @@ export class BrowseComponent implements OnInit {
 
   applyFilters() {
     this.filteredProducts = this.products.filter(p => {
-      const priceFilter = p.price >= this.filters.price[0] && p.price <= this.filters.price[1]
+      const priceFilter = !this.filters.priceEnabled || (p.price >= this.filters.price[0] && p.price <= this.filters.price[1])
       const sizeFilter = this.filters.sizes[sizesOrdered.indexOf(p.size as Size)][1]
       return priceFilter && sizeFilter
     })
