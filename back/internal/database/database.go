@@ -4,17 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"log"
-	"mime/multipart"
 	"os"
 	"time"
-
 	_ "github.com/joho/godotenv/autoload"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	"go.mongodb.org/mongo-driver/mongo/options"
     "github.com/cloudinary/cloudinary-go/v2"
 
@@ -22,12 +17,10 @@ import (
 
 type Service interface {
 	Health() map[string]string
-	CountDocuments(filter bson.D) (int64, error)
 	InsertClothing(clothing Clothing) (interface{}, error)
-	UploadImage(file multipart.File, fileHeader *multipart.FileHeader) (string, error)
 	InsertUser(user User) (interface{}, error)
 	FindUserByUsername(username string) (User, error)
-    GetDocuments(filter bson.D) ([]Clothing, error)
+    GetClothes(filter bson.D) ([]Clothing, error)
 	Credentials() (*cloudinary.Cloudinary, context.Context, error)
 }
 
@@ -62,15 +55,7 @@ func (s *service) Health() map[string]string {
 	}
 }
 
-func (s *service) CountDocuments(filter bson.D) (int64, error) {
-	coll := s.db.Database("e_commerce").Collection("clothes")
-	count, err := coll.CountDocuments(context.Background(), filter)
-	if err != nil {
-		return 0, err
-	}
-	return count, nil
-}
-func (s *service) GetDocuments(filter bson.D) ([]Clothing, error) {
+func (s *service) GetClothes(filter bson.D) ([]Clothing, error) {
     coll := s.db.Database("e_commerce").Collection("clothes")
     cursor, err := coll.Find(context.TODO(), filter)
     if err != nil {
@@ -84,16 +69,6 @@ func (s *service) GetDocuments(filter bson.D) ([]Clothing, error) {
     return results, nil
 }
 
-type Clothing struct {
-	Name        string   `bson:"name,omitempty"`
-	Reference   string   `bson:"reference,omitempty"`
-	Size        string   `bson:"size,omitempty"`
-	Color       string   `bson:"color,omitempty"`
-	Price       float64  `bson:"price,omitempty"`
-	Material    string   `bson:"material,omitempty"`
-	Description string   `bson:"description,omitempty"`
-	Images      []string `bson:"images,omitempty"`
-}
 func (s *service) Credentials() (*cloudinary.Cloudinary, context.Context, error) {
     // Obtén la URL de Cloudinary desde las variables de entorno
     cloudinaryURL := os.Getenv("CLOUDINARY_URL")
@@ -125,34 +100,6 @@ func (s *service) InsertClothing(clothing Clothing) (interface{}, error) {
 	}
 
 	return result.InsertedID, nil
-}
-
-func (s *service) UploadImage(file multipart.File, fileHeader *multipart.FileHeader) (string, error) {
-	bucket, err := gridfs.NewBucket(s.db.Database("e_commerce"))
-	if err != nil {
-		return "", fmt.Errorf("failed to create GridFS bucket: %w", err)
-	}
-
-	// Abre un stream para subir el archivo
-	uploadStream, err := bucket.OpenUploadStream(fileHeader.Filename)
-	if err != nil {
-		return "", fmt.Errorf("failed to open upload stream: %w", err)
-	}
-	defer uploadStream.Close()
-
-	// Copia los datos del archivo al stream de subida
-	_, err = io.Copy(uploadStream, file)
-	if err != nil {
-		return "", fmt.Errorf("failed to copy file data to upload stream: %w", err)
-	}
-
-	// Convierte el FileID a string usando el método Hex()
-	objectID, ok := uploadStream.FileID.(primitive.ObjectID)
-	if !ok {
-		return "", fmt.Errorf("failed to cast FileID to ObjectID")
-	}
-
-	return objectID.Hex(), nil
 }
 
 func (s *service) InsertUser(user User) (interface{}, error) {

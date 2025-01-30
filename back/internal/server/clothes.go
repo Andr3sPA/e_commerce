@@ -13,7 +13,7 @@ import (
 
 func (s *Server) getClothes(c *gin.Context){
     filter := bson.D{}
-    clothes, err := s.db.GetDocuments(filter)
+    clothes, err := s.db.GetClothes(filter)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
