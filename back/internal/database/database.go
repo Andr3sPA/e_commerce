@@ -1,34 +1,6 @@
 package database
 
 import (
-<<<<<<< HEAD
-    "context"
-    "fmt"
-    "io"
-    "log"
-    "mime/multipart"
-    "os"
-    "time"
-    _ "github.com/joho/godotenv/autoload"
-    "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/bson/primitive"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/gridfs"
-    "go.mongodb.org/mongo-driver/mongo/options"
-    "github.com/cloudinary/cloudinary-go/v2"
-
-)
-
-type Service interface {
-    Health() map[string]string
-    CountDocuments(filter bson.D) (int64, error)
-    InsertClothing(clothing Clothing) (interface{}, error)
-    UploadImage(file multipart.File, fileHeader *multipart.FileHeader) (string, error)
-    Credentials() (*cloudinary.Cloudinary, context.Context, error)
-    GetDocuments(filter bson.D) ([]Clothing, error)
-    }
-
-=======
 	"context"
 	"errors"
 	"fmt"
@@ -44,6 +16,8 @@ type Service interface {
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	"go.mongodb.org/mongo-driver/mongo/options"
+    "github.com/cloudinary/cloudinary-go/v2"
+
 )
 
 type Service interface {
@@ -53,8 +27,8 @@ type Service interface {
 	UploadImage(file multipart.File, fileHeader *multipart.FileHeader) (string, error)
 	InsertUser(user User) (interface{}, error)
 	FindUserByUsername(username string) (User, error)
+    GetDocuments(filter bson.D) ([]Clothing, error)
 }
->>>>>>> 4160c7798e47fe0e8742ae116cc635149db898e3
 
 type service struct {
 	db *mongo.Client
