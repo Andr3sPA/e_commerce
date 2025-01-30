@@ -43,12 +43,9 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-<<<<<<< HEAD
-	github.com/gorilla/schema v1.4.1 // indirect
-=======
 	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/gorilla/schema v1.4.1 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
->>>>>>> 4160c7798e47fe0e8742ae116cc635149db898e3
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect

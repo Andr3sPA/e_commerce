@@ -28,6 +28,7 @@ type Service interface {
 	InsertUser(user User) (interface{}, error)
 	FindUserByUsername(username string) (User, error)
     GetDocuments(filter bson.D) ([]Clothing, error)
+	Credentials() (*cloudinary.Cloudinary, context.Context, error)
 }
 
 type service struct {
