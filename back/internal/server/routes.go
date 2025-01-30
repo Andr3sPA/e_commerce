@@ -1,6 +1,7 @@
 package server
 
 import (
+	"back/internal/handlers"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -11,7 +12,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // Add your frontend URL
+		AllowOrigins:     []string{"http://localhost:4200"}, // Add your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true, // Enable cookies/auth
@@ -21,7 +22,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.GET("/clothes", s.getClothes)
 	r.POST("/clothes", s.insertClothing)
 	r.GET("/health", s.healthHandler)
-
+	r.POST("/register", handlers.RegisterHandler(s.db))
+	r.POST("/login", handlers.LoginHandler(s.db))
 	return r
 }
 

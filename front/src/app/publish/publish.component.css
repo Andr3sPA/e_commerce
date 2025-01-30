@@ -1,17 +1,48 @@
 div {
   margin: auto;
-  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+
   width: fit-content;
 }
 
 form {
-  display: flex;
+  display: grid;
+  grid-template-columns: 50% 1fr;
+  width: 80vw;
   flex-direction: row;
   gap: 1rem;
-  padding: 2rem;
+  column-gap: 2rem;
+  padding: 2rem 2rem;
   border-radius: 4px;
-  /* box-shadow: 2px 2px 10px -4px gray; */
+  box-shadow: 2px 2px 10px -4px gray;
   border: 1px solid #AAA;
+  transition: width .2s ease-out;
+  animation: appear .3s ease-out forwards;
+}
+
+@keyframes appear {
+  from {
+    transform: translate(-5%, -5%);
+    opacity: 0;
+    scale: .9;
+  }
+
+  to {
+    transform: translate(0);
+    opacity: 1;
+    scale: 1;
+    animation: border-increase .3s linear infinite;
+  }
+
+}
+
+.title {
+  grid-column: 1 / -1;
+  justify-self: center;
+  padding: .5rem 2rem;
+  font: var(--mat-sys-headline-small);
+  width: fit-content;
+  min-width: 16rem;
 }
 
 .fields {
@@ -21,8 +52,18 @@ form {
 }
 
 form button {
+  margin: auto;
+}
+
+.submit-btn-cont {
   grid-column: 1 / -1;
   margin: auto;
+  padding: 0;
+  transition: transform .2s ease-out;
+}
+
+.invalid-evade {
+  transform: translateX(var(--offset));
 }
 
 input::-webkit-inner-spin-button {
@@ -41,26 +82,22 @@ input#price {
   justify-content: space-evenly;
   align-items: center;
   gap: 1.6rem;
-  padding: 1rem;
-  width: 100%;
+  padding: 4rem;
+  width: 80%;
 }
 
 .product-img img {
   object-fit: contain;
-  margin: 0;
   border-radius: 4px;
-  width: 480px;
-  height: auto;
+  width: 400px;
+  max-width: 100%;
   box-shadow: 1px 1px 8px -4px gray;
-  transition: width .3s linear;
-  max-height: 60vh;
 }
 
 .product-img.not-uploaded {
-  background: radial-gradient(circle at center, color-mix(in srgb, var(--app-primary-default) 20%, transparent), transparent 10%);
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--mat-sys-primary) 20%, transparent), transparent 10%);
   background-size: 100% 100%;
   background-position: center;
-  aspect-ratio: 1;
   transition: background-size .2s ease-in-out;
 }
 
@@ -68,13 +105,31 @@ input#price {
   background-size: 300% 300%;
 }
 
+
+@media (max-width: 1024px) {
+
+  form {
+    justify-items: center;
+    box-sizing: border-box;
+    width: 90vw;
+    margin: .5rem;
+  }
+
+  .product-img {
+    width: fit-content;
+  }
+
+  .product-img,
+  .fields {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 640px) {
+
   .product-img img {
     width: 70vw;
     max-height: auto;
   }
 
-  form {
-    flex-direction: column;
-  }
 }
