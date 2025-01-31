@@ -9,7 +9,13 @@
       <a mat-menu-item>Casual</a>
     </mat-menu>
   </div>
-  <button mat-icon-button>
-    <mat-icon fontIcon="account_circle" />
-  </button>
+  <div>
+    <button mat-icon-button (click)="toggleLoginPopover()">
+      <mat-icon fontIcon="account_circle" />
+    </button>
+    <div #overlay [class.active]="loginPopoverActive" class="overlay" (click)="toggleLoginPopover()"
+      (wheel)="$event.stopPropagation()">
+      <app-login (click)="$event.stopPropagation()" class="login-popover" (action)="toggleLoginPopover()" />
+    </div>
+  </div>
 </nav>

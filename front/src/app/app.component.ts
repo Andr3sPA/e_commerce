@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, MatButtonModule, MatIconModule, RouterLink, MatTooltipModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'front';

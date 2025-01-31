@@ -8,7 +8,7 @@ import { Product } from '../../models/product';
   selector: 'app-product',
   imports: [MatCardModule, NgOptimizedImage, CurrencyPipe],
   templateUrl: './product.component.html',
-  styleUrl: './product.component.css'
+  styleUrl: './product.component.scss'
 })
 export class ProductComponent {
   @Input({ required: true }) info!: Product

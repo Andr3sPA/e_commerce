@@ -1,22 +1,23 @@
+import { KeyValuePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { KeyValuePipe } from '@angular/common';
-import { CamelToDisplayPipe } from '../camel-to-display.pipe';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
-import { HttpClient } from '@angular/common/http';
-import { Product, emptyProduct } from '../../models/product';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { emptyProduct, Product } from '../../models/product';
+import { CamelToDisplayPipe } from '../camel-to-display.pipe';
+import { ElementEvadeDirective } from '../element-evade.directive';
 
 @Component({
   selector: 'app-publish',
   imports: [MatFormFieldModule, ReactiveFormsModule, MatButtonModule, MatInputModule,
-    KeyValuePipe, CamelToDisplayPipe, MatIconModule, MatTooltipModule, MatDividerModule],
+    KeyValuePipe, CamelToDisplayPipe, MatIconModule, MatTooltipModule, MatDividerModule, ElementEvadeDirective],
   templateUrl: './publish.component.html',
-  styleUrl: './publish.component.css'
+  styleUrl: './publish.component.scss'
 })
 export class PublishComponent implements OnInit {
   httpClient = inject(HttpClient)
@@ -89,15 +90,5 @@ export class PublishComponent implements OnInit {
     this.httpClient.post("http://localhost:8080/clothes", formData).subscribe(res => {
       console.log("got res: ", res)
     })
-  }
-
-  submitBtnOffset = "0%"
-  onSubmitBtnHover() {
-    let newOffset = 50 + Math.random() * 200
-    if (this.submitBtnOffset[0] !== "-") {
-      newOffset = -newOffset
-    }
-    this.submitBtnOffset = Math.floor(newOffset) + "%"
-    console.log(this.submitBtnOffset)
   }
 }

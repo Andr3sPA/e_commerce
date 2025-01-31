@@ -21,7 +21,7 @@ import { mapKeys } from '../../utils/product';
   imports: [MatListModule, MatGridListModule, ProductComponent, MatSliderModule, MatCheckboxModule,
     MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, TitleCasePipe, InfiniteScrollDirective],
   templateUrl: './browse.component.html',
-  styleUrl: './browse.component.css',
+  styleUrl: './browse.component.scss',
   animations: [
     trigger('gridChange', [
       transition(':enter', [

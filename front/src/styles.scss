@@ -16,6 +16,7 @@ html {
 
 html,
 body {
+  box-sizing: border-box;
   height: fit-content;
   min-height: 100vh;
   background: var(--mat-sys-surface);
@@ -26,7 +27,6 @@ body {
   margin: 0;
   font-family: Josefin Sans, Roboto, "Helvetica Neue", sans-serif;
 }
-
 
 button {
   transition: .1s ease-out;
