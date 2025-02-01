@@ -10,6 +10,13 @@
     </mat-menu>
   </div>
   <div>
+    <button mat-icon-button (click)="changeMode()">
+      @if(themeMode === "dark"){
+      <mat-icon fontIcon="dark_mode" />
+      } @else {
+      <mat-icon fontIcon="light_mode" />
+      }
+    </button>
     <button mat-icon-button (click)="toggleLoginPopover()">
       <mat-icon fontIcon="account_circle" />
     </button>

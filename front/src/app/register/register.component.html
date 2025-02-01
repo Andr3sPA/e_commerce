@@ -1,0 +1,25 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input required matInput type="email" email autocomplete="email" formControlName="email" />
+    <mat-error>Please type a valid email address.</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input required matInput minlength=6 type="password" autocomplete="new-password" formControlName="password" />
+    <mat-error>Type your password</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Confirm password</mat-label>
+    <input required matInput minlength=6 type="password" autocomplete="new-password"
+      formControlName="passwordConfirm" />
+    <mat-error>The passwords do not match</mat-error>
+  </mat-form-field>
+  <div appElementEvade [evade]="registerForm.status === 'INVALID'" style="margin: auto;">
+    @if (!loading){
+    <button [disabled]="registerForm.status !== 'VALID'" mat-flat-button type="submit">Signup</button>
+    } @else {
+    <mat-icon class="animate-spin" fontIcon="autorenew"></mat-icon>
+    }
+  </div>
+</form>

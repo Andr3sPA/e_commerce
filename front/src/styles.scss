@@ -32,6 +32,20 @@ button {
   transition: .1s ease-out;
 }
 
+@keyframes spin {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}
+
+.animate-spin {
+  animation: spin 1.2s ease-in-out infinite;
+}
+
 .secondary {
   $secondary: map.get(theme.$primary-palette, secondary);
   @include mat.button-overrides ((

@@ -10,7 +10,7 @@
       [(ngModel)]="loginInfo.password" name="password" />
     <mat-error>Type your password</mat-error>
   </mat-form-field>
-  <div appElementEvade [evade]="loginForm.status === 'INVALID'" style="; margin: auto;">
+  <div appElementEvade [evade]="loginForm.status === 'INVALID'" style="margin: auto;">
     <button [disabled]="!loginForm.form.valid" mat-flat-button type="submit">Login</button>
   </div>
   <button mat-stroked-button type="button" (click)="gotoSignup()">Sign
