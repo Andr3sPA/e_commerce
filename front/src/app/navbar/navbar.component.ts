@@ -1,11 +1,12 @@
-import { afterRender, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { LoginComponent } from "../login/login.component";
 import { AuthService } from '../auth.service';
-import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -18,19 +19,18 @@ export class NavbarComponent implements OnInit {
   @ViewChild("overlay") overlayEl!: ElementRef<HTMLElement>
   loginPopoverActive = false
   themeMode = "light"
+  platformId = inject(PLATFORM_ID)
 
-  constructor() {
+  constructor() { }
 
-    afterRender(() => {
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
       const mode = localStorage.getItem("theme_mode")
       if (mode) {
         this.themeMode = mode
       }
       document.body.style.colorScheme = this.themeMode
-    })
-  }
-
-  ngOnInit() {
+    }
   }
 
   changeMode() {
