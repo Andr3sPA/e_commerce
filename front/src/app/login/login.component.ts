@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ElementEvadeDirective } from '../element-evade.directive';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class LoginComponent {
   @Output() action = new EventEmitter<"login" | "signupRedirect">()
-  httpClient = inject(HttpClient)
+  authService = inject(AuthService)
   router = inject(Router)
   loginInfo = {
     email: "",
@@ -25,11 +25,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.loading = true
-    this.httpClient.post("http://localhost:8080/login", {
-      username: this.loginInfo.email,
-      password: this.loginInfo.password
-    }).subscribe(res => {
-      console.log(res)
+    this.authService.login(this.loginInfo).subscribe(res => {
       this.loading = false
       this.action.emit("login")
     })

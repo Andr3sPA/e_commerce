@@ -22,7 +22,19 @@
     </button>
     <div #overlay [class.active]="loginPopoverActive" class="overlay" (click)="toggleLoginPopover()"
       (wheel)="$event.stopPropagation()">
-      <app-login (click)="$event.stopPropagation()" class="login-popover" (action)="toggleLoginPopover()" />
+      @if (authService.getStatus() !== "authenticated"){
+      <app-login (click)="$event.stopPropagation()" class="user-popover" (action)="toggleLoginPopover()" />
+      } @else {
+      <div (click)="$event.stopPropagation()" class="user-popover has-user">
+        <span>
+          {{authService.getUser()!.username}}
+        </span>
+        <mat-divider />
+        <button mat-stroked-button (click)="authService.logout(); ">
+          Logout
+        </button>
+      </div>
+      }
     </div>
   </div>
 </nav>

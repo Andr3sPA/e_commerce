@@ -11,7 +11,7 @@ nav {
   box-shadow: var(--mat-sys-level3);
 }
 
-nav * {
+nav mat-icon {
   color: var(--mat-sys-on-primary);
 }
 
@@ -33,7 +33,7 @@ nav * {
   transition: opacity .1s linear;
 }
 
-.login-popover {
+.user-popover {
   background-color: var(--mat-sys-surface-container);
   box-shadow: var(--mat-sys-level3);
   position: absolute;
@@ -45,20 +45,32 @@ nav * {
   transform-origin: top right;
   transform: scaleX(.4) scaleY(0);
   transition: .2s ease-out;
+
+  span {
+    color: var(--mat-sys-on-surface);
+    padding: 1rem;
+  }
+}
+
+.user-popover.has-user {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: .5rem 1rem;
 }
 
 .overlay.active {
   opacity: 1;
   pointer-events: all;
 
-  .login-popover {
+  .user-popover {
     transform: scale(1);
   }
 }
 
 
 @media (max-width: 640px) {
-  .login-popover {
+  .user-popover {
     position: fixed;
     box-sizing: border-box;
     left: 50%;
@@ -68,7 +80,7 @@ nav * {
   }
 
   .overlay.active {
-    .login-popover {
+    .user-popover {
       transform: translate(-50%, -50%) scale(1);
     }
   }

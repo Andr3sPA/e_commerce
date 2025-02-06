@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./navbar/navbar.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -14,5 +15,5 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class AppComponent {
   title = 'front';
 
-  constructor(public router: Router) { }
+  constructor(public router: Router, public authService: AuthService) { }
 }

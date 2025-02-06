@@ -1,17 +1,20 @@
-import { afterNextRender, afterRender, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { afterRender, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { LoginComponent } from "../login/login.component";
+import { AuthService } from '../auth.service';
+import { MatDivider, MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatButtonModule, MatMenuModule, MatIconModule, RouterLink, LoginComponent],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, RouterLink, LoginComponent, MatDividerModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
+  authService = inject(AuthService)
   @ViewChild("overlay") overlayEl!: ElementRef<HTMLElement>
   loginPopoverActive = false
   themeMode = "light"
