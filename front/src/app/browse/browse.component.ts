@@ -12,9 +12,10 @@ import { ProductComponent } from "../product/product.component";
 import { MatMenuModule } from '@angular/material/menu';
 import { TitleCasePipe } from '@angular/common';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Product, Size, sizesOrdered } from '../../models/product';
 import { mapKeys } from '../../utils/product';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-browse',
@@ -37,6 +38,7 @@ import { mapKeys } from '../../utils/product';
 
 export class BrowseComponent implements OnInit {
   httpClient = inject(HttpClient)
+  requestStatus = "pending"
   products: Product[] = [];
   filteredProducts: Product[] = [];
   cols = 5;
@@ -70,16 +72,28 @@ export class BrowseComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.httpClient.get("http://localhost:8080/clothes").subscribe(res => {
+    this.requestStatus = "loading"
+    this.httpClient.get("http://localhost:8080/clothes").pipe(
+      catchError((err: HttpErrorResponse) => {
+        this.requestStatus = "error"
+        return of([])
+      })
+    ).subscribe(res => {
+      this.requestStatus = "ok"
       this.products = (res as any[]).map((p) => mapKeys(p))
-    })
 
-    // apply current filters
-    this.applyFilters()
+      // apply current filters
+      this.applyFilters()
+    })
   }
 
   onScroll() {
     // TODO: get more products from back
+  }
+
+  togglePriceRange() {
+    this.filters.priceEnabled = !this.filters.priceEnabled
+    this.filtersApplied = false
   }
 
   changePriceRange(which: "min" | "max", val: number) {

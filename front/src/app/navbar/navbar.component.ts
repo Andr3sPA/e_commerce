@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { afterNextRender, afterRender, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -16,12 +16,18 @@ export class NavbarComponent implements OnInit {
   loginPopoverActive = false
   themeMode = "light"
 
+  constructor() {
+
+    afterRender(() => {
+      const mode = localStorage.getItem("theme_mode")
+      if (mode) {
+        this.themeMode = mode
+      }
+      document.body.style.colorScheme = this.themeMode
+    })
+  }
+
   ngOnInit() {
-    const mode = localStorage.getItem("theme_mode")
-    if (mode) {
-      this.themeMode = mode
-    }
-    document.body.style.colorScheme = this.themeMode
   }
 
   changeMode() {

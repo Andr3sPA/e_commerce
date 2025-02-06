@@ -2,7 +2,7 @@ export type Size = "XS" | "S" | "M" | "L" | "XL";
 export const sizesOrdered: Size[] = ["XS", "S", "M", "L", "XL"]
 
 export interface Product {
-  image: File | null,
+  image: File[] | null,
   imgUrl?: string,
   name: string,
   reference: string,

@@ -11,7 +11,13 @@
     <mat-error>Type your password</mat-error>
   </mat-form-field>
   <div appElementEvade [evade]="loginForm.status === 'INVALID'" style="margin: auto;">
+    @if (loading){
+    <button disabled mat-flat-button type="button">
+      <mat-icon fontIcon="sync" class="animate-spin" style="margin: auto;" />
+    </button>
+    } @else {
     <button [disabled]="!loginForm.form.valid" mat-flat-button type="submit">Login</button>
+    }
   </div>
   <button mat-stroked-button type="button" (click)="gotoSignup()">Sign
     up</button>

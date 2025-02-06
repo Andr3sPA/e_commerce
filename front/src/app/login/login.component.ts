@@ -5,10 +5,11 @@ import { MatInputModule } from '@angular/material/input';
 import { ElementEvadeDirective } from '../element-evade.directive';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
-  imports: [MatInputModule, MatButtonModule, FormsModule, ElementEvadeDirective],
+  imports: [MatInputModule, MatButtonModule, FormsModule, ElementEvadeDirective, MatIconModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

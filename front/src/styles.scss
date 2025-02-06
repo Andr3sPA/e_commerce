@@ -9,7 +9,7 @@ html {
         /**/
         primary: theme.$primary-palette,
         tertiary: theme.$tertiary-palette ),
-      typography: Josefin Sans,
+      typography: 'Josefin Sans',
       density: 0));
 }
 
@@ -48,6 +48,7 @@ button {
 
 .secondary {
   $secondary: map.get(theme.$primary-palette, secondary);
+  color: map.get($secondary, 30);
   @include mat.button-overrides ((
       /**/
       filled-container-color: map.get($secondary, 90),
@@ -61,6 +62,7 @@ button {
 
 .error {
   $error: map.get(theme.$primary-palette, error);
+  color: map.get($error, 30);
   @include mat.button-overrides ((
       /**/
       filled-container-color: map.get($error, 90),
