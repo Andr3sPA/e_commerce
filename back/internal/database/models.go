@@ -6,6 +6,7 @@ type User struct {
 }
 
 type Clothing struct {
+	Id          string   `bson:"_id,omitempty"`
 	Name        string   `bson:"name,omitempty"`
 	Reference   string   `bson:"reference,omitempty"`
 	Size        string   `bson:"size,omitempty"`
@@ -15,3 +16,4 @@ type Clothing struct {
 	Description string   `bson:"description,omitempty"`
 	Images      []string `bson:"images,omitempty"`
 }
+
