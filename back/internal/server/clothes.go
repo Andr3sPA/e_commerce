@@ -30,7 +30,7 @@ func (s *Server) getCloth(c *gin.Context) {
 		return
 	}
 
-	clothes, err := s.db.GetCloth(id)
+	cloth, err := s.db.GetCloth(id)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			c.JSON(http.StatusNotFound, nil)
@@ -39,7 +39,7 @@ func (s *Server) getCloth(c *gin.Context) {
 		}
 		return
 	}
-	c.JSON(http.StatusOK, clothes)
+	c.JSON(http.StatusOK, cloth)
 }
 
 func (s *Server) insertClothing(c *gin.Context) {

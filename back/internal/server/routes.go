@@ -20,6 +20,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	r.GET("/", s.HelloWorldHandler)
 	r.GET("/clothes", s.getClothes)
+	r.GET("/cloth/:id", s.getCloth)
 	r.POST("/clothes", s.insertClothing)
 	r.GET("/health", s.healthHandler)
 	r.POST("/register", handlers.RegisterHandler(s.db))

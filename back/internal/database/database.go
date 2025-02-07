@@ -4,14 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/cloudinary/cloudinary-go/v2"
-	_ "github.com/joho/godotenv/autoload"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/v2"
+	_ "github.com/joho/godotenv/autoload"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Service interface {
@@ -70,11 +72,15 @@ func (s *service) GetClothes(filter bson.D) ([]Clothing, error) {
 	return results, nil
 }
 
-// GetCloth implements Service.
 func (s *service) GetCloth(id string) (Clothing, error) {
-	filter := bson.D{{"_id", id}}
 	var res Clothing
-	err := s.db.Database("e_commerce").Collection("clothes").FindOne(context.TODO(), filter).Decode(&res)
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return res, err
+	}
+	filter := bson.M{"_id": oid}
+	err = s.db.Database("e_commerce").Collection("clothes").FindOne(context.TODO(), filter).Decode(&res)
+	fmt.Println(filter)
 	return res, err
 }
 
