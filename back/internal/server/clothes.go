@@ -85,6 +85,12 @@ func (s *Server) insertClothing(c *gin.Context) {
 	newClothing.Material = form.Value["material"][0]
 	newClothing.Description = form.Value["description"][0]
 
+	username, _ := c.Get("username")
+	user, _ := s.db.FindUserByUsername(username.(string))
+
+	newClothing.PublisherID = user.Id
+	newClothing.Status = database.InStock
+
 	price, err := strconv.ParseFloat(form.Value["price"][0], 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid price"})

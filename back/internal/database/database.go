@@ -24,6 +24,7 @@ type Service interface {
 	GetClothes(filter bson.D) ([]Clothing, error)
 	GetCloth(id string) (Clothing, error)
 	Credentials() (*cloudinary.Cloudinary, context.Context, error)
+	GetPublishedByUsername(username string) ([]Clothing, error)
 }
 
 type service struct {
@@ -68,7 +69,6 @@ func (s *service) GetClothes(filter bson.D) ([]Clothing, error) {
 	if err = cursor.All(context.TODO(), &results); err != nil {
 		panic(err)
 	}
-	fmt.Println(results[0])
 	return results, nil
 }
 
@@ -80,7 +80,6 @@ func (s *service) GetCloth(id string) (Clothing, error) {
 	}
 	filter := bson.M{"_id": oid}
 	err = s.db.Database("e_commerce").Collection("clothes").FindOne(context.TODO(), filter).Decode(&res)
-	fmt.Println(filter)
 	return res, err
 }
 
@@ -146,4 +145,25 @@ func (s *service) FindUserByUsername(username string) (User, error) {
 	}
 
 	return user, nil
+}
+
+func (s *service) GetPublishedByUsername(username string) ([]Clothing, error) {
+	coll := s.db.Database("e_commerce").Collection("clothes")
+
+	user, err := s.FindUserByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+
+	cursor, err := coll.Find(context.Background(), bson.M{"publisher_id": user.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	var clothes []Clothing
+	if err = cursor.All(context.TODO(), &clothes); err != nil {
+		return nil, err
+	}
+
+	return clothes, nil
 }

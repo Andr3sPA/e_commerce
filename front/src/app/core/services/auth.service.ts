@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +10,7 @@ export class AuthService {
   private user: { username: string } | null = null
   private status: "unauthenticated" | "loading" | "authenticated" = "unauthenticated"
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
   login(loginInfo: LoginRequest): Observable<Object>;
   login(email: string, password: string): Observable<Object>;
@@ -38,9 +39,15 @@ export class AuthService {
   }
 
   logout() {
-    //FIXME: call backend
-    this.user = null
-    this.status = "unauthenticated"
+    this.httpClient.get("http://localhost:8080/logout").subscribe(
+      {
+        complete: () => {
+          this.user = null
+          this.status = "unauthenticated"
+          this.router.navigate(["/"])
+        }
+      }
+    )
   }
 
   getUser() {

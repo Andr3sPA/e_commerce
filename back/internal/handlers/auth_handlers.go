@@ -64,3 +64,8 @@ func LoginHandler(s database.Service) gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"message": "Inicio de sesión exitoso"})
 	}
 }
+
+func LogoutHandler(c *gin.Context) {
+	c.SetCookie("session_token", "", -1, "/", "", false, true)
+	c.Status(http.StatusOK)
+}

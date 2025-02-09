@@ -2,10 +2,10 @@ import { Component, EventEmitter, HostListener, inject, Output } from '@angular/
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { ElementEvadeDirective } from '../element-evade.directive';
+import { ElementEvadeDirective } from '../core/directives/element-evade.directive';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +25,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.loading = true
-    this.authService.login(this.loginInfo).subscribe(res => {
+    this.authService.login(this.loginInfo).subscribe(() => {
       this.loading = false
       this.action.emit("login")
     })

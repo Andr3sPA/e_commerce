@@ -9,8 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { emptyProduct, Product } from '../../models/product';
-import { CamelToDisplayPipe } from '../camel-to-display.pipe';
-import { ElementEvadeDirective } from '../element-evade.directive';
+import { ElementEvadeDirective } from '../core/directives/element-evade.directive';
+import { CamelToDisplayPipe } from '../core/pipes/camel-to-display.pipe';
 
 @Component({
   selector: 'app-publish',

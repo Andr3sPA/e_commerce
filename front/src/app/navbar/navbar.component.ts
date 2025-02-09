@@ -4,13 +4,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { LoginComponent } from "../login/login.component";
-import { AuthService } from '../auth.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { isPlatformBrowser } from '@angular/common';
+import { AuthService } from '../core/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatButtonModule, MatMenuModule, MatIconModule, RouterLink, LoginComponent, MatDividerModule],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, RouterLink, LoginComponent, MatDividerModule, MatTooltip],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -21,7 +23,7 @@ export class NavbarComponent implements OnInit {
   themeMode = "light"
   platformId = inject(PLATFORM_ID)
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -45,5 +47,14 @@ export class NavbarComponent implements OnInit {
 
   toggleLoginPopover() {
     this.loginPopoverActive = !this.loginPopoverActive
+  }
+
+  getPublished() {
+    this.httpClient.get("http://localhost:8080/userinfo/published").subscribe(
+      {
+        error: console.error,
+        next: console.log
+      }
+    )
   }
 }

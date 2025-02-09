@@ -10,6 +10,9 @@
     </mat-menu>
   </div>
   <div>
+    <a mat-icon-button routerLink="/browsing_history" matTooltip="Browsing history">
+      <mat-icon fontIcon="history" />
+    </a>
     <button mat-icon-button (click)="changeMode()">
       <mat-icon [fontIcon]="themeMode === 'dark' ? 'dark_mode' : 'light_mode'" />
     </button>
@@ -25,6 +28,7 @@
         <span>
           {{authService.getUser()!.username}}
         </span>
+        <button mat-flat-button (click)="getPublished()">Get published!</button>
         <mat-divider />
         <button mat-stroked-button (click)="authService.logout(); ">
           Logout
