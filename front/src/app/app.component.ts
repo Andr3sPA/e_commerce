@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, NavbarComponent, MatButtonModule, MatIconModule, RouterLink, MatTooltipModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

@@ -13,6 +13,7 @@ import { Product, emptyProduct } from '../../models/product';
 
 @Component({
   selector: 'app-publish',
+  standalone: true,
   imports: [MatFormFieldModule, ReactiveFormsModule, MatButtonModule, MatInputModule,
     KeyValuePipe, CamelToDisplayPipe, MatIconModule, MatTooltipModule, MatDividerModule],
   templateUrl: './publish.component.html',

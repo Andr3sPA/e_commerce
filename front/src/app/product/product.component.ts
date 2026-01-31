@@ -6,6 +6,7 @@ import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product',
+  standalone: true,
   imports: [MatCardModule, NgOptimizedImage, CurrencyPipe],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'

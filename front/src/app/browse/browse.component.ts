@@ -18,6 +18,7 @@ import { mapKeys } from '../../utils/product';
 
 @Component({
   selector: 'app-browse',
+  standalone: true,
   imports: [MatListModule, MatGridListModule, ProductComponent, MatSliderModule, MatCheckboxModule,
     MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, TitleCasePipe, InfiniteScrollDirective],
   templateUrl: './browse.component.html',
