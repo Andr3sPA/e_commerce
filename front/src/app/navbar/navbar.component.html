@@ -9,7 +9,32 @@
       <a mat-menu-item>Casual</a>
     </mat-menu>
   </div>
-  <button mat-icon-button>
-    <mat-icon fontIcon="account_circle" />
-  </button>
+  <div>
+    <a mat-icon-button routerLink="/browsing_history" matTooltip="Browsing history">
+      <mat-icon fontIcon="history" />
+    </a>
+    <button mat-icon-button (click)="changeMode()">
+      <mat-icon [fontIcon]="themeMode === 'dark' ? 'dark_mode' : 'light_mode'" />
+    </button>
+    <button mat-icon-button (click)="toggleLoginPopover()">
+      <mat-icon fontIcon="account_circle" />
+    </button>
+    <div #overlay [class.active]="loginPopoverActive" class="overlay" (click)="toggleLoginPopover()"
+      (wheel)="$event.stopPropagation()">
+      @if (authService.getStatus() !== "authenticated"){
+      <app-login (click)="$event.stopPropagation()" class="user-popover" (action)="toggleLoginPopover()" />
+      } @else {
+      <div (click)="$event.stopPropagation()" class="user-popover has-user">
+        <span>
+          {{authService.getUser()!.username}}
+        </span>
+        <button mat-flat-button (click)="getPublished()">Get published!</button>
+        <mat-divider />
+        <button mat-stroked-button (click)="authService.logout(); ">
+          Logout
+        </button>
+      </div>
+      }
+    </div>
+  </div>
 </nav>

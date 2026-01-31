@@ -1,0 +1,78 @@
+mat-card {
+  width: fit-content;
+  margin: auto;
+  padding: 1rem 4rem;
+  animation: appear .3s ease-out;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scale(.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+mat-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: end;
+}
+
+.details {
+  width: 100%;
+  min-width: 8rem;
+}
+
+h3 {
+  font: var(--mat-sys-title-large);
+  margin: 0 2px .8rem 2px;
+}
+
+.price {
+  padding: .25rem;
+  border-radius: 8px;
+  background-color: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+  filter: brightness(.9);
+  font: var(--mat-sys-label-large);
+}
+
+mat-divider {
+  margin: .5rem 4px;
+  opacity: .5;
+}
+
+p.description {
+  font: var(--mat-sys-body-medium);
+}
+
+span.other {
+  background-color: var(--mat-sys-surface-container-high);
+  padding: .4rem;
+  border-radius: 4px;
+  font: var(--mat-sys-label-medium);
+}
+
+img {
+  height: auto;
+  box-shadow: 1px 1px 8px -4px gray;
+}

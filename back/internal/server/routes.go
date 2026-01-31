@@ -2,6 +2,7 @@ package server
 
 import (
 	"back/internal/handlers"
+	"back/internal/middleware"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -20,10 +21,17 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	r.GET("/", s.HelloWorldHandler)
 	r.GET("/clothes", s.getClothes)
-	r.POST("/clothes", s.insertClothing)
+	r.GET("/cloth/:id", s.getCloth)
 	r.GET("/health", s.healthHandler)
 	r.POST("/register", handlers.RegisterHandler(s.db))
 	r.POST("/login", handlers.LoginHandler(s.db))
+	r.GET("/logout", handlers.LogoutHandler)
+
+	authorized := r.Group("/", middleware.AuthMiddleware())
+	authorized.POST("/clothes", s.insertClothing)
+
+	userinfo := r.Group("/userinfo", middleware.AuthMiddleware())
+	userinfo.GET("/published", handlers.GetPublished(s.db))
 	return r
 }
 

@@ -3,8 +3,9 @@
 
 <main class="main">
   <app-navbar />
-  <a mat-fab routerLink="publish" [class.hidden]="router.url === '/publish'" matTooltip="Publish a new product"
-    matTooltipShowDelay=400 matTooltipPosition="above">
+  <a mat-fab routerLink="publish"
+    [class.hidden]="router.url === '/publish' || authService.getStatus() !== 'authenticated'"
+    matTooltip="Publish a new product" matTooltipShowDelay=400 matTooltipPosition="above">
     <mat-icon fontIcon="post_add" />
   </a>
   <router-outlet />

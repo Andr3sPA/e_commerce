@@ -1,0 +1,30 @@
+@if (productInfo){
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{productInfo.name}}</mat-card-title>
+    <mat-card-actions>
+      <button class="secondary" mat-flat-button>
+        <mat-icon fontIcon="shopping_cart" />
+        Add to cart</button>
+      <button mat-flat-button>Buy</button>
+    </mat-card-actions>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      <img [ngSrc]="productInfo.images[0]" width="400" height="400" sizes="10vw" priority />
+    </div>
+    <div class="details">
+      <h3>{{productInfo.name}}</h3>
+      <span class="price">{{productInfo.price | currency}}</span>
+      <mat-divider />
+      <p class="description">{{productInfo.description}}</p>
+      <mat-divider />
+      <span class="other">{{productInfo.material}} <b>-</b> {{productInfo.color}}</span>
+    </div>
+  </mat-card-content>
+</mat-card>
+} @else {
+<div class="animate-spin" style="margin: 4rem auto; text-align: center;">
+  Loading...
+</div>
+}

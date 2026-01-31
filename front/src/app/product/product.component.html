@@ -1,6 +1,6 @@
-<a href="noc">
+<a [routerLink]="'/product' + path">
   <mat-card appearance="outlined" class="product">
-    <img mat-card-image ngSrc={{info.imgUrl}} fill priority />
+    <img mat-card-image ngSrc={{info.images[0]}} fill priority />
     <mat-card-content>
       <span class="name">{{info.name}} </span>
       <span class="price">{{info.price | currency}}</span>

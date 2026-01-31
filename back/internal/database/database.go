@@ -7,12 +7,13 @@ import (
 	"log"
 	"os"
 	"time"
+
+	"github.com/cloudinary/cloudinary-go/v2"
 	_ "github.com/joho/godotenv/autoload"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-    "github.com/cloudinary/cloudinary-go/v2"
-
 )
 
 type Service interface {
@@ -20,8 +21,10 @@ type Service interface {
 	InsertClothing(clothing Clothing) (interface{}, error)
 	InsertUser(user User) (interface{}, error)
 	FindUserByUsername(username string) (User, error)
-    GetClothes(filter bson.D) ([]Clothing, error)
+	GetClothes(filter bson.D) ([]Clothing, error)
+	GetCloth(id string) (Clothing, error)
 	Credentials() (*cloudinary.Cloudinary, context.Context, error)
+	GetPublishedByUsername(username string) ([]Clothing, error)
 }
 
 type service struct {
@@ -56,39 +59,50 @@ func (s *service) Health() map[string]string {
 }
 
 func (s *service) GetClothes(filter bson.D) ([]Clothing, error) {
-    coll := s.db.Database("e_commerce").Collection("clothes")
-    cursor, err := coll.Find(context.TODO(), filter)
-    if err != nil {
-        return []Clothing{}, err
-    }
-    // Unpacks the cursor into a slice
+	coll := s.db.Database("e_commerce").Collection("clothes")
+	cursor, err := coll.Find(context.TODO(), filter)
+	if err != nil {
+		return []Clothing{}, err
+	}
+	// Unpacks the cursor into a slice
 	var results []Clothing
 	if err = cursor.All(context.TODO(), &results); err != nil {
 		panic(err)
 	}
-    return results, nil
+	return results, nil
+}
+
+func (s *service) GetCloth(id string) (Clothing, error) {
+	var res Clothing
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return res, err
+	}
+	filter := bson.M{"_id": oid}
+	err = s.db.Database("e_commerce").Collection("clothes").FindOne(context.TODO(), filter).Decode(&res)
+	return res, err
 }
 
 func (s *service) Credentials() (*cloudinary.Cloudinary, context.Context, error) {
-    // Obtén la URL de Cloudinary desde las variables de entorno
-    cloudinaryURL := os.Getenv("CLOUDINARY_URL")
-    if cloudinaryURL == "" {
-        return nil, nil, fmt.Errorf("CLOUDINARY_URL no está configurada")
-    }
+	// Obtén la URL de Cloudinary desde las variables de entorno
+	cloudinaryURL := os.Getenv("CLOUDINARY_URL")
+	if cloudinaryURL == "" {
+		return nil, nil, fmt.Errorf("CLOUDINARY_URL no está configurada")
+	}
 
-    // Crea una nueva instancia de Cloudinary
-    cld, err := cloudinary.NewFromURL(cloudinaryURL)
-    if err != nil {
-        return nil, nil, fmt.Errorf("error al crear instancia de Cloudinary: %w", err)
-    }
+	// Crea una nueva instancia de Cloudinary
+	cld, err := cloudinary.NewFromURL(cloudinaryURL)
+	if err != nil {
+		return nil, nil, fmt.Errorf("error al crear instancia de Cloudinary: %w", err)
+	}
 
-    // Configura la URL para que sea segura (https)
-    cld.Config.URL.Secure = true
+	// Configura la URL para que sea segura (https)
+	cld.Config.URL.Secure = true
 
-    // Crea un contexto
-    ctx := context.Background()
+	// Crea un contexto
+	ctx := context.Background()
 
-    return cld, ctx, nil
+	return cld, ctx, nil
 }
 
 func (s *service) InsertClothing(clothing Clothing) (interface{}, error) {
@@ -131,4 +145,25 @@ func (s *service) FindUserByUsername(username string) (User, error) {
 	}
 
 	return user, nil
+}
+
+func (s *service) GetPublishedByUsername(username string) ([]Clothing, error) {
+	coll := s.db.Database("e_commerce").Collection("clothes")
+
+	user, err := s.FindUserByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+
+	cursor, err := coll.Find(context.Background(), bson.M{"publisher_id": user.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	var clothes []Clothing
+	if err = cursor.All(context.TODO(), &clothes); err != nil {
+		return nil, err
+	}
+
+	return clothes, nil
 }

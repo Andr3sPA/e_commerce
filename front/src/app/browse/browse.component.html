@@ -1,11 +1,11 @@
 <mat-card class="filters">
   <h2>Filters</h2>
   <div>
-    <mat-checkbox [checked]="filters.priceEnabled">
+    <mat-checkbox [disabled]="requestStatus !== 'ok'" [checked]="filters.priceEnabled" (change)="togglePriceRange()">
       Price range:
     </mat-checkbox>
     <span style="text-align: center;">{{filters.price[0]}} - {{filters.price[1]}}</span>
-    <mat-slider min="0" max="20000">
+    <mat-slider [disabled]="!filters.priceEnabled || requestStatus !== 'ok'" min="0" max="20000">
       <input value={{filters.price[0]}} matSliderStartThumb (valueChange)="changePriceRange('min', $event)">
       <input value={{filters.price[1]}} matSliderEndThumb (valueChange)="changePriceRange('max', $event)">
     </mat-slider>
@@ -13,11 +13,12 @@
   <div>
     <span>Sizes:</span>
     @for (s of filters.sizes; track $index){
-    <mat-checkbox [checked]="s[1]" (change)="toggleSizeFilter($index)">{{s[0]}}</mat-checkbox>
+    <mat-checkbox [disabled]="requestStatus !== 'ok'" [checked]="s[1]"
+      (change)="toggleSizeFilter($index)">{{s[0]}}</mat-checkbox>
     }
   </div>
   <mat-card-actions>
-    <button [disabled]="filtersApplied" mat-flat-button (click)="applyFilters()">
+    <button [disabled]="filtersApplied || requestStatus !== 'ok'" mat-flat-button (click)="applyFilters()">
       <mat-icon aria-hidden="false" aria-label="Apply filters" fontIcon="filter_alt" />
       Apply
     </button>
@@ -25,6 +26,7 @@
     <mat-icon />
   </mat-card-actions>
 </mat-card>
+
 <mat-divider vertical="true"></mat-divider>
 
 @let sortingDirs = ["asc", "desc"];
@@ -57,10 +59,19 @@
   </mat-card>
   <mat-grid-list [cols]="cols" rowHeight={{rowHeight}} gutterSize="4px" [@gridChange] class="products-grid"
     infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+    @if (requestStatus === "ok"){
+
     @for (p of filteredProducts; track p.name) {
     <mat-grid-tile>
-      <app-product [info]=p></app-product>
+      <app-product [info]="p"></app-product>
     </mat-grid-tile>
+
+    }
+    } @else if(requestStatus === "error"){
+    <p class="error" style="text-align: center;">There was an error getting the products from the server, try again.</p>
+    } @else {
+    <p></p>
+    <p class="secondary animate-spin" style="text-align: center;">Loading...</p>
     }
   </mat-grid-list>
 </div>

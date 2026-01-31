@@ -40,8 +40,7 @@
       </mat-form-field>
       }
 
-      <div [class.invalid-evade]="productForm.status === 'INVALID'" class="submit-btn-cont"
-        [style.--offset]="submitBtnOffset" (mouseover)="onSubmitBtnHover()">
+      <div appElementEvade [evade]="productForm.status === 'INVALID'" class="submit-btn-cont">
         <button mat-flat-button [disabled]="productForm.status !== 'VALID'" color="primary" type="submit">
           Ok
         </button>

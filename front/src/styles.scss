@@ -9,17 +9,19 @@ html {
         /**/
         primary: theme.$primary-palette,
         tertiary: theme.$tertiary-palette ),
-      typography: Josefin Sans,
+      typography: 'Josefin Sans',
       density: 0));
 }
 
 
 html,
 body {
+  box-sizing: border-box;
   height: fit-content;
   min-height: 100vh;
   background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
+  font-size: 18px;
 }
 
 body {
@@ -27,13 +29,27 @@ body {
   font-family: Josefin Sans, Roboto, "Helvetica Neue", sans-serif;
 }
 
-
 button {
   transition: .1s ease-out;
 }
 
+@keyframes spin {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}
+
+.animate-spin {
+  animation: spin 1.2s ease-in-out infinite;
+}
+
 .secondary {
   $secondary: map.get(theme.$primary-palette, secondary);
+  color: map.get($secondary, 30);
   @include mat.button-overrides ((
       /**/
       filled-container-color: map.get($secondary, 90),
@@ -47,6 +63,7 @@ button {
 
 .error {
   $error: map.get(theme.$primary-palette, error);
+  color: map.get($error, 30);
   @include mat.button-overrides ((
       /**/
       filled-container-color: map.get($error, 90),

@@ -1,9 +1,10 @@
 export type Size = "XS" | "S" | "M" | "L" | "XL";
 export const sizesOrdered: Size[] = ["XS", "S", "M", "L", "XL"]
+export const PATH_ID_MARKER = "-%"
 
 export interface Product {
-  image: File | null,
-  imgUrl?: string,
+  id?: string,
+  images: File[] | string[],
   name: string,
   reference: string,
   color: string,
@@ -15,7 +16,7 @@ export interface Product {
 
 export function emptyProduct() {
   const emptyP: Product = {
-    image: null,
+    images: [],
     name: "",
     reference: "",
     color: "",
