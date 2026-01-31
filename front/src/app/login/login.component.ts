@@ -9,9 +9,10 @@ import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [MatInputModule, MatButtonModule, FormsModule, ElementEvadeDirective, MatIconModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   @Output() action = new EventEmitter<"login" | "signupRedirect">()
@@ -36,5 +37,5 @@ export class LoginComponent {
     this.router.navigate(["/register"])
   }
 
-  @HostListener("click", ["$event"]) onClick() { }
+  @HostListener("click", ["$event"]) onClick(event: Event) { }
 }

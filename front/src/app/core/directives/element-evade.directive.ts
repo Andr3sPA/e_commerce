@@ -1,7 +1,8 @@
 import { Directive, ElementRef, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Directive({
-  selector: '[appElementEvade]'
+  selector: '[appElementEvade]',
+  standalone: true
 })
 export class ElementEvadeDirective implements OnChanges {
   /**

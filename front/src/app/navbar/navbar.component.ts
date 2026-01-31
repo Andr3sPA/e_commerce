@@ -9,10 +9,20 @@ import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatDivider } from '@angular/material/divider';
+
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatButtonModule, MatMenuModule, MatIconModule, RouterLink],
+  imports: [
+    MatButtonModule, 
+    MatMenuModule, 
+    MatIconModule, 
+    RouterLink,
+    LoginComponent,        // ← AGREGAR
+    MatDividerModule,      // ← AGREGAR (o MatDivider)
+    MatTooltip             // ← AGREGAR si lo usas en el template
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })

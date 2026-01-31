@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product',
-  imports: [MatCardModule, NgOptimizedImage, CurrencyPipe],
+  imports: [MatCardModule, NgOptimizedImage, CurrencyPipe, RouterLink],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss'
 })
