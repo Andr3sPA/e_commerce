@@ -1,2 +1,2 @@
 # e_commerce
-oui
+Proyecto personal. E-commerce hecho con Go - Angular
